@@ -3,6 +3,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+from glob import glob
 
 
 #   Import stock data
@@ -13,17 +14,30 @@ import matplotlib.pyplot as plt
 print('Loading data...')
 
 try:
-    stations_path_01 = '../../datasets/bayareabikeshare/201402_station_data.csv'
-    stations_01 = pd.read_csv(stations_path_01, header=0)
 
-    stations_path_02 = '../../datasets/bayareabikeshare/201408_station_data.csv'
-    stations_02 = pd.read_csv(stations_path_02, header=0)
+    file_path_slug = '../../datasets/bayareabikeshare/*_station_data.csv'
 
-    stations_path_03 = '../../datasets/bayareabikeshare/201508_station_data.csv'
-    stations_03 = pd.read_csv(stations_path_03, header=0)
+    # glob all files
+    file_list = glob(file_path_slug)
 
-    stations_path_04 = '../../datasets/bayareabikeshare/201608_station_data.csv'
-    stations_04 = pd.read_csv(stations_path_04, header=0)
+    stations = pd.DataFrame()
+
+    for file in file_list:
+        print('Reading file \t ' + str(file))
+
+        # import file in chunks to temp DataFrame
+        print('\treading chunks...')
+        station_reader = pd.read_csv(file, chunksize=1000, iterator=True)
+
+        # concat chunks into DataFrame
+        print('\tmaking dataframe...')
+        tmp_df = pd.concat(station_reader)
+
+        # concat tmp dataframe to status_df
+        print('\tconcat to status_df')
+        stations = pd.concat([stations, tmp_df], ignore_index=True)
+
+        print('finished file!')
 
     print('data loaded successfully!')
 except:
@@ -31,6 +45,7 @@ except:
 
 
 print('\n\n')
+
 
 
 print('#' * 80)
@@ -41,8 +56,8 @@ print('#' * 80)
 print('Data cleanup started...')
 
 #   merge dataframes
-frames = [stations_01, stations_02, stations_03, stations_04]
-stations = pd.concat(frames, ignore_index=True)
+# frames = [stations_01, stations_02, stations_03, stations_04]
+# stations = pd.concat(frames, ignore_index=True)
 
 #   drop empty rows
 stations.dropna(how="all", inplace=True)
