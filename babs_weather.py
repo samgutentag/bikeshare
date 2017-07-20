@@ -64,6 +64,9 @@ df_weather.loc[df_weather['precipitation'] == 'T', 'precipitation'] = 0.
 #   force all columns to be numerical values
 df_weather['precipitation'] = pd.to_numeric(df_weather['precipitation'], errors='coerce')
 
+#   change zip to int
+# df_weather['zip'] = df_weather['zip'].astype(int)
+
 print('\tComplete!')
 
 
@@ -73,16 +76,16 @@ print('#' * 80)
 #------------------------------------------------------------------------------
 
 #look at unique values in each column
-print('#' * 80)
-print('#\tColumns and unique values')
-for col in column_new_names[1:]:
-    print('Column : ' + col)
-    print(pd.unique(df_weather[col]))
-    print()
+# print('#' * 80)
+# print('#\tColumns and unique values')
+# for col in column_new_names[1:]:
+#     print('Column : ' + col)
+#     print(pd.unique(df_weather[col]))
+#     print()
 
-print('#' * 80)
-print('#\tHEAD')
-print(df_weather.head())
+# print('#' * 80)
+# print('#\tHEAD')
+# print(df_weather.head())
 
 print('#' * 80)
 print('#\tINFO')
@@ -93,54 +96,44 @@ print('#\tDESCRIBE')
 print(df_weather.describe())
 
 print('#' * 80)
+
+
 #------------------------------------------------------------------------------
 #   Data Visualization
 #------------------------------------------------------------------------------
 
+# # plot the min_temp and max_temp weather data as a scatter plot
+# df_weather.groupby('zip').plot(kind='scatter', x='min_temp', y='max_temp')
+# plt.xlabel='min_temp (F)'
+# plt.ylabel='max_temp (F)'
+# plt.show()
 
 
-# plot the min_temp and max_temp weather data as a scatter plot
-df_weather.plot(kind='scatter', x='min_temp', y='max_temp')
+# #   plot mean_temp by zip
+color_list = ['red', 'green', 'blue', 'orange', 'yellow']
+counter = 0
+fig, ax = plt.subplots(figsize=(8,6))
+for label, df in df_weather.groupby('zip'):
+    df.plot(kind='scatter', c=color_list[counter], x='min_temp', y='max_temp', ax=ax, label=label, alpha=0.3)
+    counter += 1
+plt.legend()
 plt.xlabel='min_temp (F)'
 plt.ylabel='max_temp (F)'
 plt.show()
 
 
-df_weather['max_temp'].plot(color='r', legend=True)
-df_weather['mean_temp'].plot(color='g', legend=True)
-df_weather['min_temp'].plot(color='b', legend=True)
-plt.title('Temperature over time')
-plt.ylabel= 'Temperature (F)'
+
+
+# #   plot mean_temp by zip
+fig, ax = plt.subplots(figsize=(8,6))
+for label, df in df_weather.groupby('zip'):
+
+    df_mean_temp = df['mean_temp']
+    df_mean_temp = df_mean_temp.resample('W').mean()
+    df_mean_temp.plot(kind="line", ax=ax, label=label)
+
+plt.legend()
 plt.show()
-
-
-df_weather.plot(kind='scatter', x='cloud_cover', y='precipitation')
-plt.xlabel='Cloud Cover'
-plt.ylabel='Precipitation (In)'
-
-plt.title('Cloud Cover vs Precipitation')
-
-plt.show()
-
-
-
-
-#   plot mean_temp by zip
-
-zip_codes = [94107, 94063, 94301, 94041, 95113]
-
-for zip in zip_codes:
-    df_zip = df_weather[df_weather.zip == zip]
-    df_mean_temp = df_zip['mean_temp']
-    df_zip_smoothed = df_mean_temp.rolling(window=30).mean()
-
-    # df_zip['mean_temp'].plot(legend=True)
-    df_zip_smoothed.plot()
-    plt.title('Temperature over time')
-    plt.ylabel= 'Temperature (F)'
-    plt.show()
-
-
 
 
 #   EOF

@@ -138,7 +138,7 @@ status_docks_available_weekly_mean_smoothed.plot()
 plt.title('Docks Available by Date, Rolling Weekly Mean')
 plt.xlabel('Date')
 plt.ylabel('Docks Available')
-plt.show()
+# plt.show()
 
 
 
@@ -165,6 +165,7 @@ plt.xlabel('Date')
 plt.ylabel('Docks Available')
 
 plt.show()
+
 
 
 
