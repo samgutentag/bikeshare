@@ -74,7 +74,7 @@ hour = minute * 60
 day = hour * 24
 
 #   subset trips that leave and return to same terminal
-trips = trips[trips.loc[:,'start_terminal'] != trips.loc[:,'end_terminal']]
+# trips = trips[trips.loc[:,'start_terminal'] == trips.loc[:,'end_terminal']]
 
 
 # trips = trips[trips['duration'] < hour]
@@ -139,20 +139,26 @@ print(trips.describe())
 
 #   plot ride duration
 
-trips.plot(kind='scatter', x='start_hour', y='duration_minutes')
-plt.show()
+# trips.plot(kind='scatter', x='start_hour', y='duration_minutes')
+# plt.title('Trip Duration by Start Hour')
+# plt.xlabel('Start Hour')
+# plt.ylabel('Duration in Minutes')
+# plt.show()
 
 
 trips.boxplot(column='duration_minutes', by='start_hour')
+plt.title('Trip Duration by Start Hour')
+plt.xlabel('Start Hour')
+plt.ylabel('Duration in Minutes')
 plt.show()
 
 
 
-# calc frequency of each cross
-
-
-trips.plot(kind='scatter', x='start_terminal', y='end_terminal')
-plt.show()
+# trips.plot(kind='scatter', x='start_terminal', y='end_terminal')
+# plt.title('Starting Terminal to End Terminal')
+# plt.xlabel('Start Terminal')
+# plt.ylabel('End Terminal')
+# plt.show()
 
 
 
