@@ -41,7 +41,7 @@ try:
 
     # status = pd.concat(chunks, ignore_index=True)
     status = pd.concat(chunks)
-    print(status.head())
+    # print(status.head())
 
 
     print('data loaded successfully!')
@@ -125,7 +125,9 @@ print('#' * 80)
 #
 #
 #
-#
+#\
+
+
 status_docks_available = status['docks_available']['2014']
 
 # Resample to daily data, aggregating by max: daily_highs
@@ -138,33 +140,33 @@ status_docks_available_weekly_mean_smoothed.plot()
 plt.title('Docks Available by Date, Rolling Weekly Mean')
 plt.xlabel('Date')
 plt.ylabel('Docks Available')
-# plt.show()
-
-
-
-
-
-
-
-fig, ax = plt.subplots(figsize=(8,6))
-
-for key in status.columns:
-    print('?' + str(key) + '?' )
-
-
-# status_resample = status['2013-09':'2013-10']
-print(status.info())
-print(status.head())
-print(status.tail())
-
-for label, df in status.groupby('station_id'):
-    df.docks_available.plot(kind="kde", ax=ax, label=label)
-plt.legend()
-plt.title('Docks Available by Station ID in 2013')
-plt.xlabel('Date')
-plt.ylabel('Docks Available')
-
 plt.show()
+
+
+
+
+
+
+
+# fig, ax = plt.subplots(figsize=(8,6))
+#
+# # for key in status.columns:
+# #     print('?' + str(key) + '?' )
+#
+#
+# # status_resample = status['2013-09':'2013-10']
+# print(status.info())
+# print(status.head())
+# print(status.tail())
+#
+# for label, df in status.groupby('station_id'):
+#     df.docks_available.plot(kind="kde", ax=ax, label=label)
+# plt.legend()
+# plt.title('Docks Available by Station ID in 2013')
+# plt.xlabel('Date')
+# plt.ylabel('Docks Available')
+#
+# plt.show()
 
 
 

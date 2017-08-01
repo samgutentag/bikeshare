@@ -1,23 +1,24 @@
 
 
+#------------------------------------------------------------------------------
+#   Getting Started
+#------------------------------------------------------------------------------
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from glob import glob
 
-#------------------------------------------------------------------------------
-#   Load Data Sets
-#------------------------------------------------------------------------------
-print('\n\n')
-print('\n\n')
+print('\n' * 5)
 print('Loading data...')
-try:
 
-    #--------------------------------------------------------------------------
-    #   Trip Data
-    #--------------------------------------------------------------------------
+
+#--------------------------------------------------------------------------
+#   Load Trip Data
+#--------------------------------------------------------------------------
+try:
     print('Loading Trip Data Files')
-    file_path_slug = '../../datasets/bayareabikeshare/*_trip_data.csv'
+    file_path_slug = '../../datasets/bayareabikeshare/201*_trip_data.csv'
 
     # glob all files
     file_list = glob(file_path_slug)
@@ -46,13 +47,12 @@ try:
 except:
     print('oops... something went wrong loading the data :(')
 
+#--------------------------------------------------------------------------
+#   Load Station Data
+#--------------------------------------------------------------------------
 try:
-
-    #--------------------------------------------------------------------------
-    #   Station Data
-    #--------------------------------------------------------------------------
     print('Loading Station Data Files')
-    file_path_slug = '../../datasets/bayareabikeshare/*_station_data.csv'
+    file_path_slug = '../../datasets/bayareabikeshare/201*_station_data.csv'
 
     # glob all files
     file_list = glob(file_path_slug)
@@ -82,30 +82,10 @@ except:
 print('#' * 80)
 
 
-# #------------------------------------------------------------------------------
-# #   Data Quick Look - Import
-# #------------------------------------------------------------------------------
-#
-# print('''#------------------------------------------------------------------------------
-# #   Data Quick Look - Import
-# #------------------------------------------------------------------------------''')
-#
-# print('*' * 80)
-# print('stations')
-# print(stations.head())
-# print(stations.info())
-#
-# # print('*' * 80)
-# # print('trips')
-# # print(trips.head())
-# # print(trips.info())
-
-
 #------------------------------------------------------------------------------
 #   Data Cleanup
 #------------------------------------------------------------------------------
-
-print('cleanup of Station Data')
+print('Cleaning Station Data..')
 
 #   drop empty rows
 stations.dropna(how="all", inplace=True)
@@ -124,15 +104,6 @@ stations['installation'] = pd.to_datetime(stations['installation'])
 stations = stations.drop_duplicates(keep='first')
 stations.reset_index(inplace=True, drop=True)
 
-#   Map stations['landmark'] to trips based on station_id
-
-
-
-# print('*' * 80)
-# print('stations')
-# print(stations.head())
-# print(stations.info())
-
 #   cleanup column names
 new_cols = []
 for col in trips.columns:
@@ -144,78 +115,80 @@ trips.columns = new_cols
 important_cols = ['duration', 'start_date', 'start_terminal', 'end_date', 'end_terminal', 'bike_#', 'subscriber_type', 'zip_code']
 trips = trips[important_cols]
 
+print('\tfinished!')
+print('#' * 80)
 
-#   subset trips that leave and return to same terminal
-trips = trips[trips.loc[:,'start_terminal'] != trips.loc[:,'end_terminal']]
+
+#------------------------------------------------------------------------------
+#   Append columns of useful information
+#------------------------------------------------------------------------------
+print('Appending some useful columns to trips...')
 
 #   create duration_minutes column
 trips['duration_minutes'] = trips['duration'] / 60.
 
-# print('-' * 80)
-# print('-' * 80)
-# print('-' * 80)
-
-
-# subset trips dataframe for testing
-#   prune data set by start stations
-# trips = trips[trips.loc[:,'start_terminal'] < 23]
-# trips = trips[trips.loc[:,'start_terminal'] > 15]
-
-#   prune data set by duration
-second = 1
-minute = second * 60
-hour = minute * 60
-day = hour * 24
-
-#   subset trips that leave and return to same terminal
-# trips = trips[trips.loc[:,'start_terminal'] == trips.loc[:,'end_terminal']]
-
-
-# trips = trips[trips['duration'] < hour]
-# trips = trips[trips['duration'] > 10 * minute]
-trips = trips[trips['duration'] > 2 * hour]
-trips = trips[trips['duration'] < 10 * hour]
-
 #   build station_id : landmark dict
 landmark_dict = dict(zip(stations['station_id'].astype(int), stations['landmark'].str.lower().str.replace(' ', '_')))
 
+# add 'start_landmark' and 'end_landmark' columns to trips
 trips['start_landmark'] = trips['start_terminal']
 trips = trips.replace({'start_landmark':landmark_dict})
 
 trips['end_landmark'] = trips['end_terminal']
 trips = trips.replace({'end_landmark':landmark_dict})
 
-print(trips.head())
 
-#   add start hour column
-trips['start_date'] = pd.to_datetime(trips['start_date'])
-trips['start_hour'] = trips['start_date'].dt.hour
 
-#   prune again!
+# #   Select only trips to and from different landmark areas
 # trips = trips[trips.loc[:,'start_landmark'] != trips.loc[:,'end_landmark']]
 
-print(trips.head())
-
-trips.groupby('start_landmark').boxplot(column='duration_minutes', by='start_hour')
-# trips.groupby('start_landmark').plot(kind='line')
-plt.title('Trip Duration by Start Hour')
-plt.xlabel('Start Hour')
-plt.ylabel('Duration in Minutes')
-plt.show()
+# #   Select only trips in or out but not within San Francsico
+# trips = trips[ (trips.loc[:,'start_landmark'] == 'san_francisco') | (trips.loc[:,'end_landmark'] == 'san_francisco') ]
 
 
+# # look at unique values in each column
+# print('#' * 80)
+# print('#\tColumns and unique values')
+# detail_cols = ['duration', 'start_terminal', 'end_terminal', 'subscriber_type', 'zip_code', 'start_landmark', 'end_landmark']
+# for col in detail_cols:
+#     print('Column : ' + col + '\t' + str(len(pd.unique(trips[col]))))
+#     print(pd.unique(trips[col]))
+#     print()
 
 
-fig, ax = plt.subplots(figsize=(8,6))
+#   Select only trips within each landmark area
+trips_mountain_view = trips[ (trips.loc[:,'start_landmark'] == 'mountain_view') & (trips.loc[:,'end_landmark'] == 'mountain_view') ]
+trips_palo_alto = trips[ (trips.loc[:,'start_landmark'] == 'palo_alto') & (trips.loc[:,'end_landmark'] == 'palo_alto') ]
+trips_redwood_city = trips[ (trips.loc[:,'start_landmark'] == 'redwood_city') & (trips.loc[:,'end_landmark'] == 'redwood_city') ]
+trips_san_jose = trips[ (trips.loc[:,'start_landmark'] == 'san_jose') & (trips.loc[:,'end_landmark'] == 'san_jose') ]
+trips_san_francisco = trips[ (trips.loc[:,'start_landmark'] == 'san_francisco') & (trips.loc[:,'end_landmark'] == 'san_francisco') ]
 
-for label, df in trips.groupby('start_landmark'):
-    df.duration.plot(kind="line", ax=ax, label=label)
-plt.legend()
-# plt.title('Docks Available by Station ID in 2013')
-# plt.xlabel('Date')
-# plt.ylabel('Docks Available')
 
-plt.show()
+print('\tfinished!')
+print('#' * 80)
+
+# print(' ---- HEAD ---- ')
+# print(trips.head(20))
+#
+# print(' ---- TAIL ---- ')
+# print(trips.tail(20))
+#
+# print(' ---- SHAPE ---- ')
+# print(trips.shape)
+
+
+
+#------------------------------------------------------------------------------
+#   Statistical Analysis
+#------------------------------------------------------------------------------
+
+
+print('trips_mountain_view:\t' + str(trips_mountain_view.shape[0]))
+print('trips_palo_alto:\t' + str(trips_palo_alto.shape[0]))
+print('trips_redwood_city:\t' + str(trips_redwood_city.shape[0]))
+print('trips_san_jose:\t\t' + str(trips_san_jose.shape[0]))
+print('trips_san_francisco:\t' + str(trips_san_francisco.shape[0]))
+
 
 
 #   EOF

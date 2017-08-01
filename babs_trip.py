@@ -5,15 +5,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 from glob import glob
 
+print('\n\n')
+print('\n\n')
+
 #------------------------------------------------------------------------------
 #   Load Data Sets
 #------------------------------------------------------------------------------
-print('\n\n')
-print('\n\n')
 print('Loading data...')
 try:
 
-    file_path_slug = '../../datasets/bayareabikeshare/*_trip_data.csv'
+    file_path_slug = '../../datasets/bayareabikeshare/2014*_trip_data.csv'
 
     # glob all files
     file_list = glob(file_path_slug)
@@ -45,10 +46,10 @@ except:
     print('oops... something went wrong loading the data :(')
 
 print('#' * 80)
-#------------------------------------------------------------------------------
-#   Data Prep
-#------------------------------------------------------------------------------
 
+#------------------------------------------------------------------------------
+#   Data Cleanup - First Pass
+#------------------------------------------------------------------------------
 print('Data cleanup started...')
 
 #   cleanup column names
@@ -58,14 +59,19 @@ for col in trips.columns:
     new_col = col.replace(' ', '_').lower()
     new_cols.append(new_col)
 trips.columns = new_cols
-print('\tfinished!')
 
-#   prune down just columns we want to keep
-print('Pruning columns to the ones we want to keep...')
-# important_cols = ['trip_id', 'duration', 'start_date', 'start_terminal', 'end_date', 'end_terminal', 'bike_#', 'subscriber_type', 'zip_code']
+#   extract columns we want to keep
+print('Subsetting to useful columns...')
 important_cols = ['duration', 'start_date', 'start_terminal', 'end_date', 'end_terminal', 'bike_#', 'subscriber_type', 'zip_code']
 trips = trips[important_cols]
+
 print('\tfinished!')
+
+
+#------------------------------------------------------------------------------
+#   Prune Data
+#------------------------------------------------------------------------------
+print('Pruning Data...')
 
 #   prune data set by duration
 second = 1
@@ -73,19 +79,20 @@ minute = second * 60
 hour = minute * 60
 day = hour * 24
 
+# subset trips that are less than one hour in duration
+trips = trips[trips['duration'] < hour]
+
 #   subset trips that leave and return to same terminal
-# trips = trips[trips.loc[:,'start_terminal'] == trips.loc[:,'end_terminal']]
+trips = trips[trips.loc[:,'start_terminal'] == trips.loc[:,'end_terminal']]
+print('\tfinished!')
 
-
-# trips = trips[trips['duration'] < hour]
-# trips = trips[trips['duration'] > 10 * minute]
-# trips = trips[trips['duration'] < 0.5 * hour]
-print(trips.shape)
+#------------------------------------------------------------------------------
+#   Data Cleanup - Second Pass
+#------------------------------------------------------------------------------
+print('Data cleanup started...')
 
 #   create duration_minutes column
 trips['duration_minutes'] = trips['duration'] / 60.
-
-
 
 #   convert end and start dates to datetime objects
 print('converting end and start dates to datetime objects...')
@@ -105,6 +112,8 @@ print(trips.describe())
 #------------------------------------------------------------------------------
 
 
+
+
 # look at unique values in each column
 print('#' * 80)
 print('#\tColumns and unique values')
@@ -122,13 +131,13 @@ print('#' * 80)
 print('#\tTail')
 print(trips.tail())
 
-print('#' * 80)
-print('#\tINFO')
-print(trips.info())
+# print('#' * 80)
+# print('#\tINFO')
+# print(trips.info())
 
-print('#' * 80)
-print('#\tDESCRIBE')
-print(trips.describe())
+# print('#' * 80)
+# print('#\tDESCRIBE')
+# print(trips.describe())
 
 
 
@@ -146,12 +155,11 @@ print(trips.describe())
 # plt.show()
 
 
-trips.boxplot(column='duration_minutes', by='start_hour')
-plt.title('Trip Duration by Start Hour')
-plt.xlabel('Start Hour')
-plt.ylabel('Duration in Minutes')
-plt.show()
-
+# trips.boxplot(column='duration_minutes', by='start_hour')
+# plt.title('Trip Duration by Start Hour')
+# plt.xlabel('Start Hour')
+# plt.ylabel('Duration in Minutes')
+# plt.show()
 
 
 # trips.plot(kind='scatter', x='start_terminal', y='end_terminal')
@@ -160,6 +168,8 @@ plt.show()
 # plt.ylabel('End Terminal')
 # plt.show()
 
+
+# plot subsciber vs customer usage by hour
 
 
 
