@@ -76,12 +76,12 @@ print('#' * 80)
 #------------------------------------------------------------------------------
 
 #look at unique values in each column
-# print('#' * 80)
-# print('#\tColumns and unique values')
-# for col in column_new_names[1:]:
-#     print('Column : ' + col)
-#     print(pd.unique(df_weather[col]))
-#     print()
+print('#' * 80)
+print('#\tColumns and unique values')
+for col in column_new_names[1:]:
+    print('Column : ' + col)
+    print(pd.unique(df_weather[col]))
+    print()
 
 # print('#' * 80)
 # print('#\tHEAD')

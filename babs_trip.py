@@ -14,12 +14,12 @@ print('\n\n')
 print('Loading data...')
 try:
 
-    file_path_slug = '../../datasets/bayareabikeshare/2014*_trip_data.csv'
+    file_path_slug = '../../datasets/bayareabikeshare/*_trip_data.csv'
 
     # glob all files
     file_list = glob(file_path_slug)
 
-    status = pd.DataFrame()
+    trips = pd.DataFrame()
 
     counter = 1
     chunks = []
@@ -65,6 +65,8 @@ print('Subsetting to useful columns...')
 important_cols = ['duration', 'start_date', 'start_terminal', 'end_date', 'end_terminal', 'bike_#', 'subscriber_type', 'zip_code']
 trips = trips[important_cols]
 
+# print(trips.describe())
+
 print('\tfinished!')
 
 
@@ -80,10 +82,13 @@ hour = minute * 60
 day = hour * 24
 
 # subset trips that are less than one hour in duration
-trips = trips[trips['duration'] < hour]
+# trips = trips[trips['duration'] < 24 * hour]
+
+# subset trips that are less than ten days in duration
+trips = trips[trips['duration'] > 10 * day]
 
 #   subset trips that leave and return to same terminal
-trips = trips[trips.loc[:,'start_terminal'] == trips.loc[:,'end_terminal']]
+# trips = trips[trips.loc[:,'start_terminal'] == trips.loc[:,'end_terminal']]
 print('\tfinished!')
 
 #------------------------------------------------------------------------------
@@ -104,7 +109,9 @@ print('\tfinished!')
 #   create pickup hour column
 trips['start_hour'] = trips['start_date'].dt.hour
 
-print(trips.describe())
+# print(trips.info())
+# print(trips.describe())
+# print(trips.head())
 
 
 #------------------------------------------------------------------------------
@@ -117,19 +124,20 @@ print(trips.describe())
 # look at unique values in each column
 print('#' * 80)
 print('#\tColumns and unique values')
-detail_cols = ['duration', 'start_terminal', 'end_terminal', 'subscriber_type', 'zip_code']
+# detail_cols = ['duration', 'start_terminal', 'end_terminal', 'subscriber_type', 'zip_code']
+detail_cols = ['start_date']
 for col in detail_cols:
     print('Column : ' + col + '\t' + str(len(pd.unique(trips[col]))))
     print(pd.unique(trips[col]))
     print()
-
-print('#' * 80)
-print('#\tHEAD')
-print(trips.head())
-
-print('#' * 80)
-print('#\tTail')
-print(trips.tail())
+#
+# print('#' * 80)
+# print('#\tHEAD')
+# print(trips.head())
+#
+# print('#' * 80)
+# print('#\tTail')
+# print(trips.tail())
 
 # print('#' * 80)
 # print('#\tINFO')

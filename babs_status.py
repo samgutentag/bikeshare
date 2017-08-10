@@ -13,7 +13,7 @@ print('\n\n')
 print('Loading data...')
 try:
 
-    file_path_slug = '../../datasets/bayareabikeshare/2014*_status_data.csv'
+    file_path_slug = '../../datasets/bayareabikeshare/2016*_status_data.csv'
 
     # glob all files
     file_list = glob(file_path_slug)
@@ -125,22 +125,22 @@ print('#' * 80)
 #
 #
 #
-#\
+#
 
 
-status_docks_available = status['docks_available']['2014']
-
-# Resample to daily data, aggregating by max: daily_highs
-status_docks_available_weekly_mean = status_docks_available.resample('W').mean()
-
-# Use a rolling 7-day window with method chaining to smooth the daily high temperatures in August
-status_docks_available_weekly_mean_smoothed = status_docks_available_weekly_mean.rolling(window=4).mean()
-
-status_docks_available_weekly_mean_smoothed.plot()
-plt.title('Docks Available by Date, Rolling Weekly Mean')
-plt.xlabel('Date')
-plt.ylabel('Docks Available')
-plt.show()
+# status_docks_available = status['docks_available']['2014']
+#
+# # Resample to daily data, aggregating by max: daily_highs
+# status_docks_available_weekly_mean = status_docks_available.resample('W').mean()
+#
+# # Use a rolling 7-day window with method chaining to smooth the daily high temperatures in August
+# status_docks_available_weekly_mean_smoothed = status_docks_available_weekly_mean.rolling(window=4).mean()
+#
+# status_docks_available_weekly_mean_smoothed.plot()
+# plt.title('Docks Available by Date, Rolling Weekly Mean')
+# plt.xlabel('Date')
+# plt.ylabel('Docks Available')
+# plt.show()
 
 
 
