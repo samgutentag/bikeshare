@@ -21,7 +21,7 @@ import urllib.request
 
 
 # pass a darksky url string and returns a data frame of weather info!
-def get_weather_data(url):
+def get_weather_data(zipcode, url):
 
     # submit get request to url
     with urllib.request.urlopen(url) as URL:
@@ -35,6 +35,7 @@ def get_weather_data(url):
         # print('=' * 80)
         d = {}
         # appent record variables
+        d['zipcode'] = zipcode
         d['latitude'] = weather_dict['latitude']
         d['longitude'] = weather_dict['longitude']
         d['timezone'] = weather_dict['timezone']
@@ -114,7 +115,7 @@ for z in zip_coords:
 
     formatted_url = 'https://api.darksky.net/forecast/' + myKey + '/' + lat + ',' + lon + ',' + time + '?exclude=currently,minutely,daily,flags'
 
-    url_list.append(formatted_url)
+    url_list.append([zipcode, formatted_url])
 
 
 
@@ -122,13 +123,57 @@ for z in zip_coords:
 
 weather = pd.DataFrame()
 chunks = []
-for item in url_list:
-    chunk = get_weather_data(item)
+
+for entry in url_list:
+    zipcode = entry[0]
+    weatherURL = entry[1]
+    chunk = get_weather_data(zipcode, weatherURL)
 
     chunks.append(chunk)
 
 
 weather = pd.concat(chunks)
+
+
+#------------------------------------------------------------------------------
+#   Data Cleanup
+#------------------------------------------------------------------------------
+
+# Fill NaN values with zeros
+weather[['cloudCover', 'uvIndex']] = weather[['cloudCover', 'uvIndex']].fillna(0)
+
+
+
+# stations['station_id'] = stations['station_id'].astype(int)
+
+weather['apparentTemperature'] = weather['apparentTemperature'].astype(float)
+weather['cloudCover'] = weather['cloudCover'].astype(float)
+weather['dewPoint'] = weather['dewPoint'].astype(float)
+weather['humidity'] = weather['humidity'].astype(float)
+weather['latitude'] = weather['latitude'].astype(float)
+weather['longitude'] = weather['longitude'].astype(float)
+weather['precipIntensity'] = weather['precipIntensity'].astype(float)
+weather['precipProbability'] = weather['precipProbability'].astype(float)
+weather['pressure'] = weather['pressure'].astype(float)
+weather['temperature'] = weather['temperature'].astype(float)
+weather['uvIndex'] = weather['uvIndex'].astype(float)
+weather['visibility'] = weather['visibility'].astype(float)
+weather['windSpeed'] = weather['windSpeed'].astype(float)
+
+# weather['time_adj'] = pd.to_datetime(weather['time'],unit='s')
+# weather['time_adj'] = weather['time_adj'] + pd.to_timedelta(weather.offset, unit='h')
+
+weather['time_adj'] = pd.to_datetime(weather['time'],unit='s') + pd.to_timedelta(weather.offset, unit='h')
+
+
+# prune down to just the columns we want to use
+important_cols = ['daily_summary', 'summary', 'zipcode', 'apparentTemperature', 'cloudCover', 'latitude', 'longitude', 'precipIntensity', 'precipProbability', 'temperature', 'time_adj']
+weather = weather[important_cols]
+
+['daily_summary', 'summary', 'zipcode', 'apparentTemperature', 'cloudCover', 'latitude', 'longitude', 'precipIntensity', 'precipProbability', 'temperature', 'time_adj']
+
+
+
 
 print(weather.head())
 print(weather.info())
