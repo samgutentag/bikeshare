@@ -11,16 +11,16 @@ import matplotlib.pyplot as plt
 print('Loading data...')
 
 try:
-    weather_path_01 = '../../datasets/bayareabikeshare/201402_weather_data.csv'
+    weather_path_01 = '../../../datasets/bayareabikeshare/201402_weather_data.csv'
     df_weather_01 = pd.read_csv(weather_path_01, header=0)
 
-    weather_path_02 = '../../datasets/bayareabikeshare/201408_weather_data.csv'
+    weather_path_02 = '../../../datasets/bayareabikeshare/201408_weather_data.csv'
     df_weather_02 = pd.read_csv(weather_path_02, header=0)
 
-    weather_path_03 = '../../datasets/bayareabikeshare/201508_weather_data.csv'
+    weather_path_03 = '../../../datasets/bayareabikeshare/201508_weather_data.csv'
     df_weather_03 = pd.read_csv(weather_path_03, header=0)
 
-    weather_path_04 = '../../datasets/bayareabikeshare/201608_weather_data.csv'
+    weather_path_04 = '../../../datasets/bayareabikeshare/201608_weather_data.csv'
     df_weather_04 = pd.read_csv(weather_path_04, header=0)
 
     print('data loaded successfully!')

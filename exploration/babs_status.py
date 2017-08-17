@@ -13,7 +13,7 @@ print('\n\n')
 print('Loading data...')
 try:
 
-    file_path_slug = '../../datasets/bayareabikeshare/2016*_status_data.csv'
+    file_path_slug = '../../../datasets/bayareabikeshare/2016*_status_data.csv'
 
     # glob all files
     file_list = glob(file_path_slug)

@@ -18,7 +18,7 @@ print('Loading data...')
 #--------------------------------------------------------------------------
 try:
     print('Loading Trip Data Files')
-    file_path_slug = '../../datasets/bayareabikeshare/201*_trip_data.csv'
+    file_path_slug = '../../../datasets/bayareabikeshare/201*_trip_data.csv'
 
     # glob all files
     file_list = glob(file_path_slug)
