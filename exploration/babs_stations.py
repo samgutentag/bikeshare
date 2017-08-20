@@ -114,45 +114,45 @@ print('#' * 80)
 #
 # print(stations.head(275))
 
-# #------------------------------------------------------------------------------
-# #   Split Up by Areas
-# #------------------------------------------------------------------------------
-# areas = pd.unique(stations['landmark'])
-#
-# stations_SanJose = stations.loc[stations['landmark'] == 'San Jose']
-# print('\t>>>\tSan Jose')
+#------------------------------------------------------------------------------
+#   Split Up by Areas
+#------------------------------------------------------------------------------
+areas = pd.unique(stations['landmark'])
+
+stations_SanJose = stations.loc[stations['landmark'] == 'San Jose']
+print('\t>>>\tSan Jose')
 # print(stations_SanJose.info())
-# station_IDs_SanJose = pd.unique(stations_SanJose['station_id'])
-# print(station_IDs_SanJose)
-# print('#' * 80)
-#
-# stations_RedwoodCity = stations.loc[stations['landmark'] == 'Redwood City']
-# print('\t>>>\tRedwood City')
+station_IDs_SanJose = pd.unique(stations_SanJose['station_id'])
+print(station_IDs_SanJose)
+print('#' * 80)
+
+stations_RedwoodCity = stations.loc[stations['landmark'] == 'Redwood City']
+print('\t>>>\tRedwood City')
 # print(stations_RedwoodCity.info())
-# station_IDs_RedwoodCity = pd.unique(stations_RedwoodCity['station_id'])
-# print(station_IDs_RedwoodCity)
-# print('#' * 80)
-#
-# stations_MountainView = stations.loc[stations['landmark'] == 'Mountain View']
-# print('\t>>>\tMountain View')
+station_IDs_RedwoodCity = pd.unique(stations_RedwoodCity['station_id'])
+print(station_IDs_RedwoodCity)
+print('#' * 80)
+
+stations_MountainView = stations.loc[stations['landmark'] == 'Mountain View']
+print('\t>>>\tMountain View')
 # print(stations_MountainView.info())
-# station_IDs_MountainView = pd.unique(stations_MountainView['station_id'])
-# print(station_IDs_MountainView)
-# print('#' * 80)
-#
-# stations_PaloAlto = stations.loc[stations['landmark'] == 'Palo Alto']
-# print('\t>>>\tPalo Alto')
+station_IDs_MountainView = pd.unique(stations_MountainView['station_id'])
+print(station_IDs_MountainView)
+print('#' * 80)
+
+stations_PaloAlto = stations.loc[stations['landmark'] == 'Palo Alto']
+print('\t>>>\tPalo Alto')
 # print(stations_PaloAlto.info())
-# station_IDs_PaloAlto = pd.unique(stations_PaloAlto['station_id'])
-# print(station_IDs_PaloAlto)
-# print('#' * 80)
-#
-# stations_SanFrancisco = stations.loc[stations['landmark'] == 'San Francisco']
-# print('\t>>>\tSan Francisco')
+station_IDs_PaloAlto = pd.unique(stations_PaloAlto['station_id'])
+print(station_IDs_PaloAlto)
+print('#' * 80)
+
+stations_SanFrancisco = stations.loc[stations['landmark'] == 'San Francisco']
+print('\t>>>\tSan Francisco')
 # print(stations_SanFrancisco.info())
-# station_IDs_SanFrancisco = pd.unique(stations_SanFrancisco['station_id'])
-# print(station_IDs_SanFrancisco)
-# print('#' * 80)
+station_IDs_SanFrancisco = pd.unique(stations_SanFrancisco['station_id'])
+print(station_IDs_SanFrancisco)
+print('#' * 80)
 
 
 
