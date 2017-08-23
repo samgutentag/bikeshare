@@ -85,7 +85,7 @@ print('\tfinished!')
 #   Prune Data
 #------------------------------------------------------------------------------
 print('Pruning Data...')
-print('\timported Data set consists of %i entries' % trips.size)
+print('\timported Data set consists of %i entries' % len(trips.index))
 
 #   prune data set by duration
 second = 1
@@ -97,11 +97,11 @@ day = hour * 24
 # subset trips by duration
 print('\tpruning data to trips more than 10 minutes long...')
 ten_min_plus_trips = trips[trips['duration'] > 10 * minute].copy()
-print('\t\tpruned data set \'ten_min_plus_trips\' consists of %i entries' % ten_min_plus_trips.size)
+print('\t\tpruned data set \'ten_min_plus_trips\' consists of %i entries' % len(ten_min_plus_trips.index))
 
 print('\tpruning data to trips no more than 10 minutes long...')
 ten_min_less_trips = trips[trips['duration'] <= 10 * minute].copy()
-print('\t\tpruned data set \'ten_min_less_trips\' consists of %i entries' % ten_min_less_trips.size)
+print('\t\tpruned data set \'ten_min_less_trips\' consists of %i entries' % len(ten_min_less_trips.index))
 
 print('\tfinished!')
 
@@ -124,9 +124,9 @@ def printDataDistribution(dataSet, category, spread_list):
     print('#' * 60)
 
 # print interval spread of duration in minutes
-# intervals = [1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 60]
-# intervals_minutes = [60 * i for i in intervals]
-# printDataDistribution(trips, 'duration', intervals_minutes)
+intervals = [1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 60]
+intervals_minutes = [60 * i for i in intervals]
+printDataDistribution(trips, 'duration', intervals_minutes)
 
 # # look at unique values in each column
 # print('#' * 80)
