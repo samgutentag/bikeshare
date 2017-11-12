@@ -64,7 +64,7 @@ def stream_gbfs_feed_json_to_csv(feed_url, feed_service='SERVICE', feed_name='FE
     # Timestamp file
     dt = datetime.now()
     m = floor(dt.minute/5)*5
-    tstamp = '{:04d}{:02d}{:02d}{:02d}{:02d}'.format(dt.year, dt.month, dt.day, dt.hour, m)
+    tstamp = '{:04d}{:02d}{:02d}{:02d}{:02d}'.format(dt.year, dt.month, dt.day, dt.hour, dt.minute)
     file_name = 'streamed_data/%s/station_status_data_%s.csv' % (feed_service.lower(), tstamp)
     file_name = 'streamed_data/%s/%s_%s_data_%s.csv' % (feed_service.lower(), feed_service.lower(), feed_name.lower(), tstamp)
     df_to_csv(df, file_name)
@@ -82,15 +82,18 @@ def main():
         cogo_feed_url = "https://gbfs.cogobikeshare.com/gbfs/en/station_status.json"
         babs_feed_url = "https://gbfs.fordgobike.com/gbfs/en/station_status.json"
 
-        feed_url = babs_feed_url
-        program_name = 'babs'
+        feed_url = cogo_feed_url
+        program_name = 'cogo'
         feed_name = 'station_status'
 
 
         print('[%s] - Fetching feed from \'%s\'...' % (datetime.now().time(), feed_url))
-        refresh_timer = stream_gbfs_feed_json_to_csv(feed_url, feed_service=program_name, feed_name=feed_name)
+        try:
+            refresh_timer = stream_gbfs_feed_json_to_csv(feed_url, feed_service=program_name, feed_name=feed_name)
+        except:
+            print('---- Somethign went wrong, moving on ----')
         seconds = 60
-        minutes = 5
+        minutes = 3
         refresh_timer = minutes*seconds
         print('\t[%s] - Waiting %s minutes to run again...\n' % (datetime.now().time(), minutes))
         s.enter(refresh_timer, 1, do_something, (sc,))
