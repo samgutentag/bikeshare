@@ -21,6 +21,7 @@ def get_stream_json(feed_url="https://gbfs.fordgobike.com/gbfs/en/station_status
         with urllib.request.urlopen(feed_url) as url:
             url_json_response = json.loads(url.read().decode())
     except:
+        print('URL %s had no response, skipping...' % feed_url)
         return False
 
     df = pd.DataFrame(url_json_response['data'])
@@ -32,6 +33,7 @@ def get_stream_json(feed_url="https://gbfs.fordgobike.com/gbfs/en/station_status
 
     # without these columns, we cant perform analysis
     if 'num_bikes_available' not in df.columns or 'num_docks_available' not in df.columns or 'last_reported' not in df.columns:
+        print('Feed %s does not have required columns, skipping...' % feed_url)
         return False
 
     # drop null values in
@@ -64,6 +66,10 @@ def get_stream_json(feed_url="https://gbfs.fordgobike.com/gbfs/en/station_status
     return df
 
 def df_to_csv(df, file_dir, file_path):
+
+    if len(df) == 0:
+        print('Dataframe contained no data, skipping...')
+        return False
 
     # make sure directory exists
     if not os.path.exists(file_dir):
@@ -105,7 +111,7 @@ def stream_gbfs_feed_json_to_csv(feed_url="https://gbfs.fordgobike.com/gbfs/en/s
                                                             tstamp)
 
     df_to_csv(df, file_dir, file_name)
-    
+
     return True
 
 
@@ -131,11 +137,11 @@ def main():
         # International
         get_stream(time_zone = 'America/Toronto', time_adjustment = pd.Timedelta('5:00:00'), time_adjust_forward = False, program_id = 'sobi_hamilton',               feed_url = 'https://hamilton.socialbicycles.com/opendata/station_status.json')
         # get_stream(time_zone = 'America/Toronto', time_adjustment = pd.Timedelta('5:00:00'), time_adjust_forward = False, program_id = 'velgo',                       feed_url = 'http://velogo.ca/opendata/station_status.json') # FEED IS EMPTY
-        get_stream(time_zone = 'Asia/Dubai', time_adjustment = pd.Timedelta('4:00:00'), time_adjust_forward = True, program_id = 'ABU',                         feed_url = 'https://api-core.bikeshare.ae/gbfs/gbfs/en/station_status.json')
-        get_stream(time_zone = 'Europe/Prague', time_adjustment = pd.Timedelta('1:00:00'), time_adjust_forward = True, program_id = 'velonet_cz',                  feed_url = 'http://velonet.cz/opendata/station_status.json')
+        # get_stream(time_zone = 'Asia/Dubai', time_adjustment = pd.Timedelta('4:00:00'), time_adjust_forward = True, program_id = 'ABU',                         feed_url = 'https://api-core.bikeshare.ae/gbfs/gbfs/en/station_status.json')
+        # get_stream(time_zone = 'Europe/Prague', time_adjustment = pd.Timedelta('1:00:00'), time_adjust_forward = True, program_id = 'velonet_cz',                  feed_url = 'http://velonet.cz/opendata/station_status.json')
         get_stream(time_zone = 'Australia/Melbourne', time_adjustment = pd.Timedelta('10:00:00'), time_adjust_forward = True, program_id = 'monash_bike_share',           feed_url = 'https://monashbikeshare.com/opendata/station_status.json')
         get_stream(time_zone = 'America/Montreal', time_adjustment = pd.Timedelta('5:00:00'), time_adjust_forward = False, program_id = 'bike_share_toronto',          feed_url = 'https://tor.publicbikesystem.net/ube/gbfs/v1/en/station_status')
-        get_stream(time_zone = 'Australia/Perth', time_adjustment = pd.Timedelta('8:00:00'), time_adjust_forward = True, program_id = 'curtin_university',           feed_url = 'http://curtinbikeshare.com/opendata/station_status.json')
+        # get_stream(time_zone = 'Australia/Perth', time_adjustment = pd.Timedelta('8:00:00'), time_adjust_forward = True, program_id = 'curtin_university',           feed_url = 'http://curtinbikeshare.com/opendata/station_status.json')
 
 
         # Mountain Time
