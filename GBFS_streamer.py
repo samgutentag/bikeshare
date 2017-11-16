@@ -21,19 +21,15 @@ def get_stream_json(feed_url="https://gbfs.fordgobike.com/gbfs/en/station_status
         with urllib.request.urlopen(feed_url) as url:
             url_json_response = json.loads(url.read().decode())
     except:
-        print('URL %s had no response, skipping...' % feed_url)
+        print('\tURL %s had no response, skipping...' % feed_url)
         return False
 
     df = pd.DataFrame(url_json_response['data'])
-    df.head()
-    try:
-        df = pd.concat([df.drop(['stations'], axis=1), df['stations'].apply(pd.Series)], axis=1)
-    except:
-        print('COULD NOT CONCAT')
+    df = pd.concat([df.drop(['stations'], axis=1), df['stations'].apply(pd.Series)], axis=1)
 
     # without these columns, we cant perform analysis
     if 'num_bikes_available' not in df.columns or 'num_docks_available' not in df.columns or 'last_reported' not in df.columns:
-        print('Feed %s does not have required columns, skipping...' % feed_url)
+        print('\tFeed %s does not have required data, skipping...' % feed_url)
         return False
 
     # drop null values in
@@ -68,7 +64,7 @@ def get_stream_json(feed_url="https://gbfs.fordgobike.com/gbfs/en/station_status
 def df_to_csv(df, file_dir, file_path):
 
     if len(df) == 0:
-        print('Dataframe contained no data, skipping...')
+        print('\tDataframe contained no data, skipping...')
         return False
 
     # make sure directory exists
@@ -126,7 +122,8 @@ def get_stream(feed_url, program_id, time_zone, time_adjustment, time_adjust_for
                                         time_adjustment = time_adjustment,
                                         time_adjust_forward=time_adjust_forward)
     except:
-        print('---- Something went wrong, moving on ----')
+        # print('---- Something went wrong, moving on ----')
+        pass
 
 
 def main():
@@ -136,9 +133,9 @@ def main():
 
         # International
         get_stream(time_zone = 'America/Toronto', time_adjustment = pd.Timedelta('5:00:00'), time_adjust_forward = False, program_id = 'sobi_hamilton',               feed_url = 'https://hamilton.socialbicycles.com/opendata/station_status.json')
-        # get_stream(time_zone = 'America/Toronto', time_adjustment = pd.Timedelta('5:00:00'), time_adjust_forward = False, program_id = 'velgo',                       feed_url = 'http://velogo.ca/opendata/station_status.json') # FEED IS EMPTY
-        # get_stream(time_zone = 'Asia/Dubai', time_adjustment = pd.Timedelta('4:00:00'), time_adjust_forward = True, program_id = 'ABU',                         feed_url = 'https://api-core.bikeshare.ae/gbfs/gbfs/en/station_status.json')
-        # get_stream(time_zone = 'Europe/Prague', time_adjustment = pd.Timedelta('1:00:00'), time_adjust_forward = True, program_id = 'velonet_cz',                  feed_url = 'http://velonet.cz/opendata/station_status.json')
+        get_stream(time_zone = 'America/Toronto', time_adjustment = pd.Timedelta('5:00:00'), time_adjust_forward = False, program_id = 'velgo',                       feed_url = 'http://velogo.ca/opendata/station_status.json') # FEED IS EMPTY
+        get_stream(time_zone = 'Asia/Dubai', time_adjustment = pd.Timedelta('4:00:00'), time_adjust_forward = True, program_id = 'ABU',                         feed_url = 'https://api-core.bikeshare.ae/gbfs/gbfs/en/station_status.json')
+        get_stream(time_zone = 'Europe/Prague', time_adjustment = pd.Timedelta('1:00:00'), time_adjust_forward = True, program_id = 'velonet_cz',                  feed_url = 'http://velonet.cz/opendata/station_status.json')
         get_stream(time_zone = 'Australia/Melbourne', time_adjustment = pd.Timedelta('10:00:00'), time_adjust_forward = True, program_id = 'monash_bike_share',           feed_url = 'https://monashbikeshare.com/opendata/station_status.json')
         get_stream(time_zone = 'America/Montreal', time_adjustment = pd.Timedelta('5:00:00'), time_adjust_forward = False, program_id = 'bike_share_toronto',          feed_url = 'https://tor.publicbikesystem.net/ube/gbfs/v1/en/station_status')
         # get_stream(time_zone = 'Australia/Perth', time_adjustment = pd.Timedelta('8:00:00'), time_adjust_forward = True, program_id = 'curtin_university',           feed_url = 'http://curtinbikeshare.com/opendata/station_status.json')
@@ -154,14 +151,14 @@ def main():
         # Central Time
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_nashville',            feed_url = 'https://gbfs.bcycle.com/bcycle_nashville/station_status.json')
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_austin',               feed_url = 'https://gbfs.bcycle.com/bcycle_austin/station_status.json')
-        # get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bike_chattanooga',            feed_url = 'https://gbfs.bikechattanooga.com/gbfs/gbfs/en/station_status.json') # replaced by new feed
+        get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bike_chattanooga',            feed_url = 'https://gbfs.bikechattanooga.com/gbfs/gbfs/en/station_status.json') # replaced by new feed
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_bublr',                feed_url = 'https://gbfs.bcycle.com/bcycle_bublr/station_status.json')
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_clarksville',          feed_url = 'https://gbfs.bcycle.com/bcycle_clarksville/station_status.json')
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_dallasfairpark',       feed_url = 'https://gbfs.bcycle.com/bcycle_dallasfairpark/station_status.json')
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_desmoines',            feed_url = 'https://gbfs.bcycle.com/bcycle_desmoines/station_status.json')
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_elpaso',               feed_url = 'https://gbfs.bcycle.com/bcycle_elpaso/station_status.json')
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_fortworth',            feed_url = 'https://gbfs.bcycle.com/bcycle_fortworth/station_status.json')
-        # get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_greatrides',           feed_url = 'https://gbfs.bcycle.com/bcycle_greatrides/station_status.json')     # feed is empty...
+        get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_greatrides',           feed_url = 'https://gbfs.bcycle.com/bcycle_greatrides/station_status.json')     # feed is empty...
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_heartland',            feed_url = 'https://gbfs.bcycle.com/bcycle_heartland/station_status.json')
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_houston',              feed_url = 'https://gbfs.bcycle.com/bcycle_houston/station_status.json')
         get_stream(time_zone = 'America/Chicago', time_adjustment = pd.Timedelta('6:00:00'), time_adjust_forward = False, program_id = 'bcycle_kc',                   feed_url = 'https://gbfs.bcycle.com/bcycle_kc/station_status.json')
@@ -212,7 +209,7 @@ def main():
         get_stream(time_zone = 'America/New_York', time_adjustment = pd.Timedelta('5:00:00'), time_adjust_forward = False, program_id = 'hubway',                     feed_url = 'https://gbfs.thehubway.com/gbfs/en/station_status.json')
 
 
-        # New Programs!  - These dont end in .json, need special handling
+        # New Programs!
         get_stream(time_zone = 'America/Curacao',       time_adjustment = pd.Timedelta('4:00:00'),      time_adjust_forward = False, program_id = 'aru',                feed_url = 'https://aru.publicbikesystem.net/ube/gbfs/v1/en/station_status.json')
         get_stream(time_zone = 'America/Fortaleza',     time_adjustment = pd.Timedelta('3:00:00'),      time_adjust_forward = False, program_id = 'rec',                feed_url = 'https://rec.publicbikesystem.net/ube/gbfs/v1/en/station_status.json')
         get_stream(time_zone = 'Atlantic/Reykjavik',    time_adjustment = pd.Timedelta('0:00:00'),      time_adjust_forward = False, program_id = 'rey',                feed_url = 'https://rey.publicbikesystem.net/ube/gbfs/v1/en/station_status.json')
