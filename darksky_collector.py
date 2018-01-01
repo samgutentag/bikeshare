@@ -63,17 +63,18 @@ def get_forecast(_url):
 
     lon = str(list(forecast.longitude.unique())[0]).replace('.', '').replace('-', '')
     filename = './source_data/darksky/%s%s%s_%s.csv' % (fn_y, fn_m, fn_d, lon)
+    print('\t%s' % filename)
 
     forecast.to_csv(filename)
 
     return forecast
 
-subset = api_calls[:950]
+subset = api_calls[:]
 
 total_calls = len(subset)
 spacing = len(str(total_calls)) + 1
 
 for i, c in enumerate(subset):
     _url = str(c).strip()[1:-1]
-    print('%s of %s - %s' % (str(i).rjust(spacing), str(total_calls).rjust(spacing), _url))
+    print('%s of %s - %s' % (str(i+1).rjust(spacing), str(total_calls).rjust(spacing), _url))
     get_forecast(_url)
