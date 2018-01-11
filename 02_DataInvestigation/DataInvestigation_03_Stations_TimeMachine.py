@@ -205,11 +205,16 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
 
     trip_grids = list()
     datetime_stamps = list()
-    for i, date in enumerate(sorted(df.start_date.unique())):
-        date_trips = df[df.start_date == date].copy()
+    file_count = len(sorted(df.start_date.dt.date.unique()))
+    for i, date in enumerate(sorted(df.start_date.dt.date.unique())):
+        date_trips = df[df.start_date.dt.date == date].copy()
+
         trip_grid = make_route_grid(trip_df=date_trips)
 
-        print('\t../charts/station_trends/time_machine/%s/%s_route_heatmap_%s.png' % (prefix.replace(' ','_').lower(), prefix.lower(), str(i).zfill(10)))
+        print('\t../charts/station_trends/time_machine/%s/%s_route_heatmap_%s.png of %s' % (prefix.replace(' ','_').lower(),
+                                                                                            prefix.replace(' ','_').lower(),
+                                                                                            str(i).zfill(10),
+                                                                                            file_count))
 
         mask = trip_grid == 0
         fig, ax = plt.subplots(figsize=(GRID_DIMS*1.5, GRID_DIMS))
@@ -244,16 +249,20 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
 # Make Time Machine Plots!
 #----------------------------------------------------------------------------------------------------------------
 
+commuter_trips = pd.concat([morning_commutes, evening_commutes])
+commuter_trips.drop_duplicates(subset=['trip_id'], inplace=True)
+commuter_trips.reset_index(inplace=True, drop=True)
+
+
+
+print('%s Total Subscriber Trips' % str(subscriber_trips.shape[0]).ljust(8))
+print('%s Total Customer Trips' % str(customer_trips.shape[0]).ljust(8))
+print('%s Total Commuter Trips' % str(commuter_trips.shape[0]).ljust(8))
+
 timeline_grid_plots(df=subscriber_trips, prefix='Subscriber')
-print(subscriber_trips.shape[0])
-# timeline_grid_plots(df=customer_trips, prefix='Customer')
-# print(customer_trips.shape[0])
-# commuter_trips = pd.concat([morning_commutes, evening_commutes])
-# commuter_trips.drop_duplicates(subset=['trip_id'], inplace=True)
-# commuter_trips.reset_index(inplace=True, drop=True)
-#
-# timeline_grid_plots(df=commuter_trips, prefix='Commuter')
-# print(commuter_trips.shape[0])
-#
-#
-# # EOF
+timeline_grid_plots(df=customer_trips, prefix='Customer')
+timeline_grid_plots(df=commuter_trips, prefix='Commuter')
+
+
+
+# EOF
