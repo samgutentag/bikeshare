@@ -244,16 +244,16 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
 # Make Time Machine Plots!
 #----------------------------------------------------------------------------------------------------------------
 
-timeline_grid_plots(df=subscriber_trips[:2], prefix='Subscriber')
+timeline_grid_plots(df=subscriber_trips, prefix='Subscriber')
 print(subscriber_trips.shape[0])
-timeline_grid_plots(df=customer_trips[:2], prefix='Customer')
-print(customer_trips.shape[0])
-commuter_trips = pd.concat([morning_commutes, evening_commutes])
-commuter_trips.drop_duplicates(subset=['trip_id'], inplace=True)
-commuter_trips.reset_index(inplace=True, drop=True)
-
-timeline_grid_plots(df=commuter_trips[:2], prefix='Commuter')
-print(commuter_trips.shape[0])
-
-
-# EOF
+# timeline_grid_plots(df=customer_trips, prefix='Customer')
+# print(customer_trips.shape[0])
+# commuter_trips = pd.concat([morning_commutes, evening_commutes])
+# commuter_trips.drop_duplicates(subset=['trip_id'], inplace=True)
+# commuter_trips.reset_index(inplace=True, drop=True)
+#
+# timeline_grid_plots(df=commuter_trips, prefix='Commuter')
+# print(commuter_trips.shape[0])
+#
+#
+# # EOF
