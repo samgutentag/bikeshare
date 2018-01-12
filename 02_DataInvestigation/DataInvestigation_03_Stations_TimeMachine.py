@@ -207,6 +207,8 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
     file_count = len(sorted(df.start_date.dt.date.unique()))
 
     cumm_grid = pd.DataFrame()
+    trips_max = make_route_grid(trip_df=df)
+    trips_max = trips_max.max().max()
 
     for i, date in enumerate(sorted(df.start_date.dt.date.unique())):
         date_trips = df[df.start_date.dt.date == date].copy()
@@ -245,8 +247,9 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
 
         grid_max = cumm_grid.max().max()
         cbar_ticks = [x for x in np.arange(0, grid_max+1, grid_max/10)]
-
-        sns.heatmap(data=cumm_grid, linecolor='grey', linewidths=.5, square=True, cmap=cmap,
+    
+        normed_grid = cumm_grid / trips_max
+        sns.heatmap(data=normed_grid, linecolor='grey', linewidths=.5, square=True, cmap=cmap,
                     mask=mask, ax=ax, cbar_kws={"shrink": .75, "ticks":cbar_ticks}, cbar=True)
 
         ax.set_xlabel('Start Station', size=LABEL_FONT_SIZE, weight='bold')
@@ -255,7 +258,7 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
         title = '%s Route Heatmap - %s' % (prefix, str(date).replace('T', ' ').split('.')[0])
         ax.set_title(title, size=TITLE_FONT_SIZE, weight='bold')
 
-        plt.savefig('../charts/station_trends/time_machine/%s/%s_route_heatmap_%s.png' % (prefix.replace(' ','_').lower(), prefix.replace(' ','_').lower(), str(i).zfill(10)))
+        plt.savefig('../charts/station_trends/time_machine/%s/normed_%s_route_heatmap_%s.png' % (prefix.replace(' ','_').lower(), prefix.replace(' ','_').lower(), str(i).zfill(10)))
         plt.close()
 
 
