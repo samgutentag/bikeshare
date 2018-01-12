@@ -242,8 +242,12 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
         if prefix.lower() == 'commuter':
             cmap = sns.color_palette('Greens', 20)
 
+
+        grid_max = cumm_grid.max().max()
+        cbar_ticks = [x for x in np.arange(0, grid_max+1, grid_max/10)]
+
         sns.heatmap(data=cumm_grid, linecolor='grey', linewidths=.5, square=True, cmap=cmap,
-                    mask=mask, ax=ax, cbar_kws={"shrink": .75}, cbar=True)
+                    mask=mask, ax=ax, cbar_kws={"shrink": .75, "ticks":cbar_ticks}, cbar=True)
 
         ax.set_xlabel('Start Station', size=LABEL_FONT_SIZE, weight='bold')
         ax.set_ylabel('End Station', size=LABEL_FONT_SIZE, weight='bold')
