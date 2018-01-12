@@ -156,7 +156,6 @@ def make_route_grid(trip_df=None, station_ids=stations.station_id):
     columns = [x for x in station_ids]
 
     trip_grid = pd.DataFrame(index=index, columns=columns)
-    # morning_trip_grid
 
     # create grid of trips from start to end terminal counts
     for sid in station_ids:
@@ -206,17 +205,30 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
     trip_grids = list()
     datetime_stamps = list()
     file_count = len(sorted(df.start_date.dt.date.unique()))
+
+    cumm_grid = pd.DataFrame()
+
     for i, date in enumerate(sorted(df.start_date.dt.date.unique())):
         date_trips = df[df.start_date.dt.date == date].copy()
 
         trip_grid = make_route_grid(trip_df=date_trips)
+        if cumm_grid.shape[0] == 0:
+            cumm_grid = trip_grid.copy()
+        else:
+            cumm_grid += trip_grid
+
+
+
+        print('trip_grid {}'.format(str(trip_grid.sum().sum())))
+        print('cumm_grid {}'.format(str(cumm_grid.sum().sum())))
+
 
         print('\t../charts/station_trends/time_machine/%s/%s_route_heatmap_%s.png of %s' % (prefix.replace(' ','_').lower(),
                                                                                             prefix.replace(' ','_').lower(),
                                                                                             str(i).zfill(10),
                                                                                             file_count))
 
-        mask = trip_grid == 0
+        mask = cumm_grid == 0
         fig, ax = plt.subplots(figsize=(GRID_DIMS*1.5, GRID_DIMS))
 
         cmap = sns.color_palette('OrRd', 20)
@@ -230,7 +242,7 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
         if prefix.lower() == 'commuter':
             cmap = sns.color_palette('Greens', 20)
 
-        sns.heatmap(data=trip_grid, linecolor='grey', linewidths=.5, square=True, cmap=cmap,
+        sns.heatmap(data=cumm_grid, linecolor='grey', linewidths=.5, square=True, cmap=cmap,
                     mask=mask, ax=ax, cbar_kws={"shrink": .75}, cbar=True)
 
         ax.set_xlabel('Start Station', size=LABEL_FONT_SIZE, weight='bold')
@@ -241,6 +253,9 @@ def timeline_grid_plots(df=morning_commutes, prefix='Morning Commuter'):
 
         plt.savefig('../charts/station_trends/time_machine/%s/%s_route_heatmap_%s.png' % (prefix.replace(' ','_').lower(), prefix.replace(' ','_').lower(), str(i).zfill(10)))
         plt.close()
+
+
+
     print('[%s] Plots Complete!' % datetime.datetime.now().time())
 
 
@@ -254,15 +269,15 @@ commuter_trips.drop_duplicates(subset=['trip_id'], inplace=True)
 commuter_trips.reset_index(inplace=True, drop=True)
 
 
-
 print('%s Total Subscriber Trips' % str(subscriber_trips.shape[0]).ljust(8))
 print('%s Total Customer Trips' % str(customer_trips.shape[0]).ljust(8))
 print('%s Total Commuter Trips' % str(commuter_trips.shape[0]).ljust(8))
 
-timeline_grid_plots(df=subscriber_trips, prefix='Subscriber')
-timeline_grid_plots(df=customer_trips, prefix='Customer')
-timeline_grid_plots(df=commuter_trips, prefix='Commuter')
 
+
+timeline_grid_plots(df=commuter_trips, prefix='Commuter')
+timeline_grid_plots(df=customer_trips, prefix='Customer')
+timeline_grid_plots(df=subscriber_trips, prefix='Subscriber')
 
 
 # EOF
