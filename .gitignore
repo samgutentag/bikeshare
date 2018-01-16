@@ -7,8 +7,8 @@
 *.json
 datasets/*
 
-capstones/bayareabikeshare/source_data/*
-capstones/bayareabikeshare/clean_data/*
+source_data/*
+clean_data/*
 
 *.csv
 *.png
