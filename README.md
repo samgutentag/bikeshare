@@ -100,19 +100,19 @@ For each station, drop duplicated rows, reported when a station does not move or
 Next we attend to each note included in the `README` files, example Station
 
 Data Columns
-	`station_id`           (string)    number ID for the station
-	`station_name`         (string)    name of the station
-	`lat`                  (float)     latitude coordinate of the station
-	`long`                 (float)     longitude coordinate of the station
-	`dock_count`           (int)       number of docks at the station
-	`region`               (string)    city/service area the station is located within
-	`first_service_date`   (datetime)  date that the station became active
-	`last_service_date`	   (datetime)  date that the station became inactive, else the final date in the recorded data, gathered from `trips_data` last trip completion date
-	`zip_code`             (int)       zip code the station is located within
-	`days_in_service`      (int)       `last_service_date` - `first_service_date`
-	`elevation_meters`     (float)     collected from polling the Google Maps Elevation API
-	`elevation_feet`       (float)     meters converted to feet by dividing `elevatoin_meters` by 0.3048
-
+| `station_id`         | (string)   | number ID for the station                                                                                                             |
+|----------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| `station_name`       | (string)   | name of the station                                                                                                                   |
+| `lat`                | (float)    | latitude coordinate of the station                                                                                                    |
+| `long`               | (float)    | longitude coordinate of the station                                                                                                   |
+| `dock_count`         | (int)      | number of docks at the station                                                                                                        |
+| `region`             | (string)   | city/service area the station is located within                                                                                       |
+| `first_service_date` | (datetime) | date that the station became active                                                                                                   |
+| `last_service_date`  | (datetime) | date that the station became inactive else the final date in the recorded data (gathered from `trips_data` last trip completion date) |
+| `zip_code`           | (int)      | zip code the station is located within                                                                                                |
+| `days_in_service`    | (int)      | `last_service_date` - `first_service_date`                                                                                            |
+| `elevation_meters`   | (float)    | collected from polling the Google Maps Elevation API                                                                                  |
+| `elevation_feet`     | (float)    | meters converted to feet by dividing `elevatoin_meters` by 0.3048                                                                     |
 
 ### Dark Sky Data
 
