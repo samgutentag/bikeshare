@@ -3,18 +3,14 @@
 #       repo specific gitignore stuff
 #---------------------------------------------------------------
 
-*.csv
-*.json
-datasets/*
 
-source_data/*
-clean_data/*
+00_source_data/*
+00_clean_data/*
 
 *.csv
 *.png
 
 *.ipynb_checkpoints
-*.ipynb_checkpoints/
 
 
 

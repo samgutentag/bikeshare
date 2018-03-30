@@ -34,8 +34,6 @@ def csv_chunk_importer(file_path_slug='', column_labels=[], chunk_size=10000, dr
 
     """
 
-
-
     time_marker('Started Loading Data...')
     file_list = glob(file_path_slug)
 
@@ -56,13 +54,13 @@ def csv_chunk_importer(file_path_slug='', column_labels=[], chunk_size=10000, dr
             chunks.append(chunk)
 
         if file_count < 50:
-            time_marker('\tFinished file! ({:d} of {:d})'.format(ii+1, len(file_list)))
+            time_marker('\tFinished file! ({:>2d} of {:>2d})'.format(ii+1, len(file_list)))
         elif file_count >= 50 and file_count < 1000:
             if ii % 100 == 0 or ii == 0 or ii == file_count:
-                time_marker('\tFinished file! ({:d} of {:d})'.format(ii+1, len(file_list)))
+                time_marker('\tFinished file! ({:>4d} of {:>4d})'.format(ii+1, len(file_list)))
         else:
             if ii % 1000 == 0 or ii == 0 or ii == file_count:
-                time_marker('\tFinished file! ({:d} of {:d})'.format(ii+1, len(file_list)))
+                time_marker('\tFinished file! ({:>5d} of {:>5d})'.format(ii+1, len(file_list)))
 
     time_marker('concatenating chunks...')
     df = pd.concat(chunks)
