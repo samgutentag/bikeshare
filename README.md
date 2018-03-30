@@ -100,6 +100,7 @@ For each station, drop duplicated rows, reported when a station does not move or
 Next we attend to each note included in the `README` files, example Station
 
 Data Columns
+
 | `station_id`         | (string)   | number ID for the station                                                                                                             |
 |----------------------|------------|---------------------------------------------------------------------------------------------------------------------------------------|
 | `station_name`       | (string)   | name of the station                                                                                                                   |
