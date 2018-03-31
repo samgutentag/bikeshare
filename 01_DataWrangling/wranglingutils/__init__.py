@@ -5,6 +5,29 @@ import pandas as pd
 from glob import glob
 
 
+import matplotlib
+import matplotlib.pyplot as plt
+from math import ceil
+
+import datetime
+
+import seaborn as sns
+sns.set_style('whitegrid')
+sns.set_context("poster")
+font = {'size'   : 50}
+matplotlib.rc('font', **font)
+
+COLOR_BLU = '#0074C8'
+COLOR_YEL = '#FACD6B'
+COLOR_GRY = '#71C9BE'
+COLOR_GRE = '#85B74A'
+
+LABEL_FONT_SIZE = 15
+TITLE_FONT_SIZE = 25
+TICK_FONT_SIZE = 10
+FIG_SIZE = (15,6)
+
+
 
 def csv_chunk_importer(file_path_slug='', column_labels=[], chunk_size=10000, drop_dups=False):
     """Load a collection of files in chunks
@@ -118,6 +141,61 @@ def zip_to_landmark(zip_code):
     if zip_code == 95113:
         return 'San Jose'
     return False
+
+
+def plot_counts(df,top_n=20,
+                color_norm=COLOR_BLU, color_highlight=COLOR_YEL,
+                highlight_labels=[],
+                x_label='', x_label_rot = 0,
+                y_label='', y_interval=25,
+                title='', figsize=FIG_SIZE):
+
+    # if highest count is greater than 1000, use logy scale
+    if df.max() > 450:
+        logy=True
+    else:
+        logy=False
+
+    # select top n most popular by count
+    plot_index = df.sort_values(ascending=False)[:top_n].index
+    df = df[df.index.isin(plot_index)]
+
+    color_codes = [color_norm if x not in highlight_labels else color_highlight for x in df.index]
+    ax = df.plot(figsize=figsize, kind='bar', logy=logy, color=color_codes)
+    ax.set_title('{}'.format(title.title()), size=TITLE_FONT_SIZE, weight='bold')
+
+    ax.set_ylabel('{}'.format(y_label), size=LABEL_FONT_SIZE, weight='bold')
+    ax.set_xlabel('{} (top {})'.format(x_label, top_n), size=LABEL_FONT_SIZE, weight='bold')
+
+    # remove spines
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
+    # y scale and ticks
+    if logy:
+        mag = len(str(df.max()))
+        ax.set_ylabel('{} (log)'.format(y_label), size=LABEL_FONT_SIZE, weight='bold')
+        for y in [10**y for y in range(0, mag+1)]:
+            ax.axhline(y, linestyle=':', color=COLOR_GRY, zorder=-1)
+    else:
+        y_max = ceil(df.max()/y_interval)
+
+        ax.set_yticks([y*y_interval for y in range(0, y_max+1)])
+        for y in [y*y_interval for y in range(0, y_max+1)]:
+            ax.axhline(y, linestyle=':', color=COLOR_GRY, zorder=-1)
+
+    # x tick labels
+    ax.set_xticklabels([x for x in df.index], size=TICK_FONT_SIZE, rotation=x_label_rot)
+
+    ax.grid(False)
+    plt.tight_layout()
+    plt.savefig('../charts/plot_counts_{}_counts.png'.format(title.replace(' ', '_').lower()))
+#     print('../charts/{}_counts.png'.format(title.replace(' ', '_').lower()))
+
+    plt.show()
+    plt.close()
+
+
 
 
 # EOF
