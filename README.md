@@ -95,7 +95,8 @@ Each Data Table is saved to a python pickle output file, so that data frames and
 
 ### Stations Data
 
-<ol>The stations data is in a collection of 4 files, each including the status of all stations that are active at the time the data was collected.  Additionally, Bay Area Bike Share published a `README.txt` file with each data set that includes notes on station expansion and relocation dates.
+<p>The stations data is in a collection of 4 files, each including the status of all stations that are active at the time the data was collected.  Additionally, Bay Area Bike Share published a `README.txt` file with each data set that includes notes on station expansion and relocation dates.</p>
+<ol>
     <li>For each station, drop duplicated rows, reported when a station does not move or change between data collection times.</li>
     <li>Next we attend to each note included in the `README` files provided by the Bay Area Bike Share Program.</li>
 </ol>
@@ -119,7 +120,8 @@ Each Data Table is saved to a python pickle output file, so that data frames and
 
 ### Dark Sky Data
 
-<ol>Dark Sky is a weather data provider and includes a Time Machine API to view historical hourly weather data.  The API is polled in another script and the output files are stored in CSV format to be cleaned
+<p>Dark Sky is a weather data provider and includes a Time Machine API to view historical hourly weather data.  The API is polled in another script and the output files are stored in CSV format to be cleaned</p>
+<ol>
     <li>`time` is provided in unix timestamp at GMT, converted to human readable datetime localized to Pacific Standard Time</li>
     <li>`is_raining` is determined by precipitation amount being over 0.0, or if the type is reported as 'Rain'</li>
 </ol>
@@ -147,7 +149,9 @@ Each Data Table is saved to a python pickle output file, so that data frames and
 
 ### Trip Data
 
-<ol>The trip data is in a collection of 4 files, each including records for each recorded trip taken as part of the program
+<p>The trip data is in a collection of 4 files, each including records for each recorded trip taken as part of the program</p>
+
+<ol>
     <li>Prune to include only trips within San Francisco and 180 minutes or less in duration</li>
     <li>`user_zip` is the user home zip code and from notes provided with the data set we know that these are likely to not be accurate as they were user reported.  Also this data was not collected until a few months after the program went live.</li>
     <li><ul>`additional_charges` is the value of additional charges assigned to the trip
@@ -190,8 +194,7 @@ Each Data Table is saved to a python pickle output file, so that data frames and
 See other projects by Sam on [Github](https://github.com/samgutentag)
 
 ## Acknowledgments
-* The [Yelp Open Data Set](https://www.yelp.com/dataset)
-* [Simon Worgan](https://www.linkedin.com/in/simon-worgan-44613138/)
-* [Springboard](www.springboard.com)
-* [DarkSky](https://darksky.net)
-* [AggData](https://www.aggdata.com/node/86)
+* [Bay Area Bike Share](https://www.fordgobike.com) (now FordGoBike)
+* [Simon Worgan](https://www.linkedin.com/in/simon-worgan-44613138/) for Mentorship and Feedback
+* [DarkSky](https://darksky.net) for Historical Weather Data
+* [AggData](https://www.aggdata.com/node/86) for United States Zipcode information
