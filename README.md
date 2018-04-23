@@ -186,6 +186,39 @@ Each Data Table is saved to a python pickle output file, so that data frames and
 
 
 
+### Status Data
+
+<p>The status data is a minute by minute report of the number of available bikes and docks at each station</p>
+
+<ol>
+    <li>Prune to include only trips within San Francisco and 180 minutes or less in duration</li>
+    <li>`user_zip` is the user home zip code and from notes provided with the data set we know that these are likely to not be accurate as they were user reported.  Also this data was not collected until a few months after the program went live.</li>
+    <li><ul>`additional_charges` is the value of additional charges assigned to the trip
+        <li><b>Subscribers:</b> are charged $3 per 15 minute window over 45 minutes</li>
+        <li><b>Customers:</b> are charged $3 per 15 minute window over 30 minutes</li>
+    </ul></li>
+</ol>
+
+<b>Final Output Data Columns</b>
+
+| Column Name           | dtype         | Description                                                       |
+|-----------------------|---------------|-------------------------------------------------------------------|
+| `station_id`          | int64         | Number ID for the station                                         |
+| `bikes_available`     | int64         | Number of bikes available at the station to rent                  |
+| `docks_available`     | int64         | Number of empty docks available at the station to park            |
+| `time`                | datetime64[ns]| Time                                                              |
+| `station_name`        | object        | Human Readable Station Name                                       |
+| `lat`                 |  float64      | Latitude coordinate of the station                                |
+| `long`                |  float64      | Longitude coordinate of the station                               |
+| `dock_count`          |  int64        | Number of docks at the station                                    |
+| `region`              |  object       | City/service area the station is located within                   |
+| `first_service_date`  |  datetime     | Date that the station became active                               |
+| `last_service_date`   |  datetime     | Date that the station became inactive                             |
+| `zip_code`            |  int64        | Zip code the station is located within                            |
+| `days_in_service`     |  int64        | Days between `last_service_date` and `first_service_date`         |
+| `elevation_meters`    |  float64      | Collected from polling the Google Maps Elevation API              |
+| `elevation_feet`      |  float64      | Meters converted to feet by dividing `elevation_meters` by 0.3048 |
+
 
 # Additional Information
 ## Authors
