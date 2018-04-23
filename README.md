@@ -190,15 +190,6 @@ Each Data Table is saved to a python pickle output file, so that data frames and
 
 <p>The status data is a minute by minute report of the number of available bikes and docks at each station</p>
 
-<ol>
-    <li>Prune to include only trips within San Francisco and 180 minutes or less in duration</li>
-    <li>`user_zip` is the user home zip code and from notes provided with the data set we know that these are likely to not be accurate as they were user reported.  Also this data was not collected until a few months after the program went live.</li>
-    <li><ul>`additional_charges` is the value of additional charges assigned to the trip
-        <li><b>Subscribers:</b> are charged $3 per 15 minute window over 45 minutes</li>
-        <li><b>Customers:</b> are charged $3 per 15 minute window over 30 minutes</li>
-    </ul></li>
-</ol>
-
 <b>Final Output Data Columns</b>
 
 | Column Name           | dtype         | Description                                                       |
