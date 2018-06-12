@@ -77,13 +77,13 @@ def csv_chunk_importer(file_path_slug='', column_labels=[], chunk_size=10000, dr
             chunks.append(chunk)
 
         if file_count < 50:
-            time_marker('\tFinished file! ({:>2d} of {:>2d})'.format(ii+1, len(file_list)))
+            time_marker('\tFinished file! ({:>2d} of {:>2d})'.format(ii, len(file_list)))
         elif file_count >= 50 and file_count < 1000:
             if ii % 100 == 0 or ii == 0 or ii == file_count:
-                time_marker('\tFinished file! ({:>4d} of {:>4d})'.format(ii+1, len(file_list)))
+                time_marker('\tFinished file! ({:>4d} of {:>4d})'.format(ii, len(file_list)))
         else:
             if ii % 1000 == 0 or ii == 0 or ii == file_count:
-                time_marker('\tFinished file! ({:>5d} of {:>5d})'.format(ii+1, len(file_list)))
+                time_marker('\tFinished file! ({:>5d} of {:>5d})'.format(ii, len(file_list)))
 
     time_marker('concatenating chunks...')
     df = pd.concat(chunks)
@@ -95,8 +95,6 @@ def csv_chunk_importer(file_path_slug='', column_labels=[], chunk_size=10000, dr
     time_marker('Data Loaded Successfully!')
 
     return df
-
-
 
 def time_marker(text=''):
     """Pretty print a time stamp with string
@@ -112,7 +110,6 @@ def time_marker(text=''):
 
     """
     print('[{}] {}'.format(datetime.datetime.now().time(), text.strip()))
-
 
 def landmark_to_zip(row):
     ''' Return zipcode for given landmark'''
@@ -141,7 +138,6 @@ def zip_to_landmark(zip_code):
     if zip_code == 95113:
         return 'San Jose'
     return False
-
 
 def plot_counts(df,top_n=20,
                 color_norm=COLOR_BLU, color_highlight=COLOR_YEL,
@@ -189,9 +185,7 @@ def plot_counts(df,top_n=20,
 
     ax.grid(False)
     plt.tight_layout()
-    plt.savefig('../charts/plot_counts_{}_counts.png'.format(title.replace(' ', '_').lower()))
-#     print('../charts/{}_counts.png'.format(title.replace(' ', '_').lower()))
-
+    plt.savefig('../01_charts/plot_counts_{}_counts.png'.format(title.replace(' ', '_').lower()))
     plt.show()
     plt.close()
 
