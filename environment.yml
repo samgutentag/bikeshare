@@ -1,5 +1,7 @@
 name: bikeshare
 channels:
+  - conda-forge
+  - anaconda-fusion
   - defaults
 dependencies:
   - appnope=0.1.0=py36hf537a9a_0
