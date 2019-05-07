@@ -27,6 +27,11 @@ __pycache__/
 # C extensions
 *.so
 
+bin
+include
+etc
+share
+
 # Distribution / packaging
 .Python
 env/
